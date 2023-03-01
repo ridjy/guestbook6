@@ -4,6 +4,9 @@ namespace App\Controller\Admin;
 
 use App\Entity\Conference;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 
 class ConferenceCrudController extends AbstractCrudController
 {
@@ -12,14 +15,11 @@ class ConferenceCrudController extends AbstractCrudController
         return Conference::class;
     }
 
-    /*
     public function configureFields(string $pageName): iterable
     {
-        return [
-            IdField::new('id'),
-            TextField::new('title'),
-            TextEditorField::new('description'),
-        ];
+        yield TextField::new('ville');
+        yield TextField::new('annee');
+        yield BooleanField::new('isInternational');
+        yield TextField::new('slug')->onlyOnIndex();
     }
-    */
 }
