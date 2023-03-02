@@ -5,6 +5,10 @@
 {% block body %}
     <h2>{{ conference }} Conference</h2>
 
+    <h2>Add your own feedback</h2>
+
+    {{ form(comment_form) }} <br/>
+
     {% if comments|length > 0 %}
     <div>There are {{ comments|length }} comments.</div>
         {% for comment in comments %}
