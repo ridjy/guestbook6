@@ -17,22 +17,22 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager): void
     {
         $amsterdam = new Conference();
-        $amsterdam->setCity('Amsterdam');
-        $amsterdam->setYear('2019');
+        $amsterdam->setVille('Amsterdam');
+        $amsterdam->setAnnee('2019');
         $amsterdam->setIsInternational(true);
         $manager->persist($amsterdam);
 
         $paris = new Conference();
-        $paris->setCity('Paris');
-        $paris->setYear('2020');
+        $paris->setVille('Paris');
+        $paris->setAnnee('2020');
         $paris->setIsInternational(false);
         $manager->persist($paris);
 
         $comment1 = new Comment();
         $comment1->setConference($amsterdam);
-        $comment1->setAuthor('Fabien');
+        $comment1->setAuteur('Fabien');
         $comment1->setEmail('fabien@example.com');
-        $comment1->setText('This was a great conference.');
+        $comment1->setCommentaire('This was a great conference.');
         $manager->persist($comment1);
 
         $admin = new Admin();
