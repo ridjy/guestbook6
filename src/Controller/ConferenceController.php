@@ -10,15 +10,16 @@ use App\Repository\ConferenceRepository;
 use App\Entity\Conference;
 use App\Repository\CommentRepository;
 use App\Form\CommentFormType;
+use App\Message\CommentMessage;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Comment;
-use App\SpamChecker;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 class ConferenceController extends AbstractController
 {
-    public function __construct(private EntityManagerInterface $entityManager) 
+    public function __construct(private EntityManagerInterface $entityManager,private MessageBusInterface $bus) 
     {
     }
 
@@ -50,6 +51,7 @@ class ConferenceController extends AbstractController
             }
 
             $this->entityManager->persist($comment);
+            $this->entityManager->flush();
 
             //check spam
             $context = [
@@ -58,11 +60,11 @@ class ConferenceController extends AbstractController
                 'referrer' => $request->headers->get('referer'),
                 'permalink' => $request->getUri(),
             ];
-            if (2 === $spamChecker->getSpamScore($comment, $context)) {
+            /*if (2 === $spamChecker->getSpamScore($comment, $context)) {
                 throw new \RuntimeException('Blatant spam, go away!');
-            }
-
-            $this->entityManager->flush();
+            }*/
+            //$this->entityManager->flush();
+            $this->bus->dispatch(new CommentMessage($comment->getId(), $context));
 
             return $this->redirectToRoute('conference', ['slug' => $conference->getSlug()]);
         }
