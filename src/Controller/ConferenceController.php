@@ -25,7 +25,13 @@ class ConferenceController extends AbstractController
     {
     }
 
-    #[Route('/', name: 'homepage')]
+    #[Route('/')]
+    public function indexNoLocale(): Response
+    {
+        return $this->redirectToRoute('homepage', ['_locale' => 'en']);
+    }
+
+    #[Route('/{_locale<%app.supported_locales%>}/', name: 'homepage')]
     public function index(ConferenceRepository $conferenceRepository): Response
     {
         return $this->render('conference/index.html.twig', [
@@ -33,7 +39,7 @@ class ConferenceController extends AbstractController
         ]);
     }
 
-    #[Route('/conference/{slug}', name: 'conference')]
+    #[Route('/{_locale<%app.supported_locales%>}/conference/{slug}', name: 'conference')]
     public function show(Request $request, Conference $conference, CommentRepository $commentRepository,NotifierInterface $notifier, #[Autowire('%photo_dir%')] string $photoDir): Response
     {
         $comment = new Comment();
